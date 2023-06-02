@@ -1,61 +1,49 @@
+"use client";
+
+import Hero from "../Hero";
+import { motion } from "framer-motion";
 import { spidermanFont } from "@/fonts";
-import Image from "next/image";
 import styles from "./heroes.module.scss";
 
-import ImageSpiderMan616 from "@public/spiders/spider-man-616.png";
-import ImageSpiderMan1610 from "@public/spiders/spider-man-1610.png";
-import ImageSpiderWoman65 from "@public/spiders/mulher-aranha-65.png";
-import ImageSpDr14512 from "@public/spiders/sp-dr-14512.png";
-import ImageSpiderHam8311 from "@public/spiders/spider-ham-8311.png";
-import ImageSpiderMan928 from "@public/spiders/spider-man-928.png";
-import ImageSpiderMan90214 from "@public/spiders/spider-man-90214.png";
-
 const heroes = [
-  {
-    id: "spider-man-616",
-    src: ImageSpiderMan616,
-    alt: "Homem-Aranha (Terra-616)",
-  },
-  {
-    id: "mulher-aranha-65",
-    src: ImageSpiderWoman65,
-    alt: "Mulher-Aranha (Terra-65)",
-  },
-  {
-    id: "spider-man-1610",
-    src: ImageSpiderMan1610,
-    alt: "Homem-Aranha (Terra-1610)",
-  },
-  {
-    id: "sp-dr-14512",
-    src: ImageSpDr14512,
-    alt: "Homem-Aranha (Terra-14512)",
-  },
-  {
-    id: "porco-aranha-8311",
-    src: ImageSpiderHam8311,
-    alt: "Porco-Aranha (Terra-8311)",
-  },
-  {
-    id: "spider-man-90214",
-    src: ImageSpiderMan90214,
-    alt: "Homem-Aranha (Terra-90214)",
-  },
-  {
-    id: "spider-man-928",
-    src: ImageSpiderMan928,
-    alt: "Homem-Aranha (Terra-928)",
-  },
+  "spider-man-616",
+  "mulher-aranha-65",
+  "spider-man-1610",
+  "sp-dr-14512",
+  "porco-aranha-8311",
+  "spider-man-90214",
+  "spider-man-928",
 ];
 
 export default function Heroes() {
   return (
-    <section className={styles.heroes}>
-      {heroes.map(({ id, alt, src }) => (
-        <div className={styles.imageContainer} key={id}>
-          <Image src={src} alt={alt} />
-        </div>
-      ))}
-    </section>
+    <>
+      <motion.h1
+        className={`${spidermanFont.className} ${styles.title}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 2 }}
+      >
+        Personagens
+      </motion.h1>
+      <motion.section
+        className={styles.heroes}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 2 }}
+      >
+        {heroes.map((hero) => (
+          <motion.div
+            className={styles.imageContainer}
+            key={hero}
+            whileHover={{ scale: 1.3 }}
+            whileTap={{ scale: 0.8 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Hero heroId={hero} />
+          </motion.div>
+        ))}
+      </motion.section>
+    </>
   );
 }
