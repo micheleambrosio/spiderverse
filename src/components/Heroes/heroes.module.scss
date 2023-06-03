@@ -4,15 +4,14 @@
   align-items: flex-end;
   display: flex;
   justify-content: space-between;
-  max-width: 1920px;
   position: absolute;
   top: 400px;
   width: 100%;
 }
 
 .imageContainer {
-  position: relative;
   cursor: pointer;
+  position: relative;
 
   &:nth-child(1) {
     height: 360px;
