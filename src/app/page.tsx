@@ -1,10 +1,23 @@
 import Heroes from "@/components/Heroes";
+import { IHeroData } from "@/interfaces/heroes";
 import styles from "./page.module.scss";
 
-export default function Home() {
+async function getData(): Promise<{ data: IHeroData[] }> {
+  const res = await fetch("http://localhost:3000/api/heroes");
+
+  if (!res.ok) {
+    throw new Error("Falha ao buscar heróis");
+  }
+
+  return res.json();
+}
+
+export default async function Home() {
+  const res = await getData();
+
   return (
     <main className={styles.main}>
-      <Heroes />
+      <Heroes heroes={res.data} />
     </main>
   );
 }
