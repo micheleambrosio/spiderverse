@@ -50,7 +50,7 @@ interface IProps {
   heroId: string;
 }
 
-export default function Hero({ heroId }: IProps) {
+export default function HeroImage({ heroId }: IProps) {
   return (
     <Image
       src={heroes.find((item) => item.id === heroId)?.src || ImageSpiderMan616}

@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.hero {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  img {
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    width: 100%;
+  }
+}

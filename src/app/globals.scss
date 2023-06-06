@@ -23,7 +23,6 @@ body {
   margin: auto;
   max-width: $max-width;
   overflow: hidden;
-  position: relative;
 }
 
 header {
@@ -31,4 +30,6 @@ header {
   display: flex;
   justify-content: space-between;
   margin: 3rem;
+  position: relative;
+  z-index: 4;
 }

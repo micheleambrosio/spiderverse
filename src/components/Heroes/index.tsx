@@ -1,6 +1,6 @@
 "use client";
 
-import Hero from "../Hero";
+import HeroImage from "../Hero";
 import { motion } from "framer-motion";
 import { spidermanFont } from "@/fonts";
 import styles from "./heroes.module.scss";
@@ -40,7 +40,7 @@ export default function Heroes() {
             whileTap={{ scale: 0.8 }}
             transition={{ duration: 0.8 }}
           >
-            <Hero heroId={hero} />
+            <HeroImage heroId={hero} />
           </motion.div>
         ))}
       </motion.section>
