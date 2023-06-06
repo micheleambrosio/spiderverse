@@ -14,8 +14,8 @@ const heroes = [
   "spider-man-616",
   "mulher-aranha-65",
   "spider-man-1610",
-  // "sp-dr-14512",
-  // "porco-aranha-8311",
+  "sp-dr-14512",
+  "porco-aranha-8311",
   "spider-man-90214",
   "spider-man-928",
 ];
@@ -47,7 +47,7 @@ export default function Hero() {
   return (
     <div className={styles.container}>
       <div className={styles.wrapper} onClick={() => handleClick(1)}>
-        <AnimatePresence initial={false} mode="popLayout">
+        <AnimatePresence mode="popLayout">
           {visibleItems.map((item) => (
             <motion.div
               className={styles.hero}
@@ -57,7 +57,7 @@ export default function Hero() {
               initial="enter"
               animate="visibleItems"
               exit="exit"
-              transition={{ duration: 1.5 }}
+              transition={{ duration: 1 }}
               custom={{
                 direction,
                 position: () => {
@@ -84,7 +84,7 @@ const variants: Variants = {
   enter: (params: IVariantsProps) => {
     return {
       x: -1500,
-      scale: 0,
+      scale: 0.75,
     };
   },
   visibleItems: (params: IVariantsProps) => {
@@ -95,7 +95,10 @@ const variants: Variants = {
   },
   exit: (params: IVariantsProps) => {
     return {
-      x: "-100%",
+      x: 0,
+      left: "-20%",
+      opacity: 0,
+      scale: 1,
     };
   },
 };
@@ -105,12 +108,13 @@ const getItemStyles = (position: string) => {
     return {
       scale: 1,
       zIndex: 3,
+      filter: "blur(10px)",
     };
   }
 
   if (position === "center") {
     return {
-      left: "-14%",
+      left: "-10%",
       scale: 0.8,
       zIndex: 2,
     };
@@ -119,8 +123,9 @@ const getItemStyles = (position: string) => {
   // position === "right"
   return {
     scale: 0.8,
-    // top: -450,
     left: "-55%",
     zIndex: 1,
+    filter: "blur(10px)",
+    opacity: 0.8,
   };
 };
