@@ -14,7 +14,7 @@ const heroesImage: Record<string, StaticImageData> = {
   "mulher-aranha-65": ImageSpiderWoman65,
   "spider-man-1610": ImageSpiderMan1610,
   "sp-dr-14512": ImageSpDr14512,
-  "porco-aranha-8311": ImageSpiderHam8311,
+  "spider-ham-8311": ImageSpiderHam8311,
   "spider-man-90214": ImageSpiderMan90214,
   "spider-man-928": ImageSpiderMan928,
 };

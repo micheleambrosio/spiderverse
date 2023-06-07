@@ -42,6 +42,7 @@ export default function Carousel({ heroes }: IProps) {
 
     const currentHeroId = visibleItems[1].id;
     htmlEl.setAttribute("id", currentHeroId);
+    htmlEl.style.background = `url("/spiders/${currentHeroId}-background.png")`;
 
     return () => {
       htmlEl.removeAttribute("id");
@@ -114,28 +115,32 @@ const variants: Variants = {
 };
 
 const getItemStyles = (position: string) => {
+  // position === "left" (herói da frente)
   if (position === "left") {
     return {
-      scale: 1,
-      zIndex: 3,
       filter: "blur(10px)",
+      scale: 1.2,
+      zIndex: 3,
     };
   }
 
+  // position === "center" (herói do meio)
   if (position === "center") {
     return {
-      left: "-10%",
+      left: 300,
       scale: 0.8,
+      top: "-10%",
       zIndex: 2,
     };
   }
 
-  // position === "right"
+  // position === "right" (herói de trás)
   return {
-    scale: 0.8,
-    left: "-55%",
-    zIndex: 1,
     filter: "blur(10px)",
+    left: 160,
     opacity: 0.8,
+    scale: 0.6,
+    top: "-20%",
+    zIndex: 1,
   };
 };
