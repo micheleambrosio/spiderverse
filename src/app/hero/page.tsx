@@ -1,5 +1,5 @@
-"use client";
 import Carousel from "@/components/Carousel";
+import HeroDetails from "@/components/HeroDetails";
 import { IHeroData } from "@/interfaces/heroes";
 import styles from "./page.module.scss";
 
@@ -16,5 +16,10 @@ async function getData(): Promise<{ data: IHeroData[] }> {
 export default async function Hero() {
   const res = await getData();
 
-  return <Carousel heroes={res.data} />;
+  return (
+    <div className={styles.container}>
+      <Carousel heroes={res.data} />
+      <HeroDetails />
+    </div>
+  );
 }
