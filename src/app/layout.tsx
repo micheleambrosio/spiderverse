@@ -1,6 +1,7 @@
 import "./globals.scss";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,13 +26,15 @@ export default function HeroLayout({
             height={25}
             priority
           />
-          <Image
-            src="/spider-logo.svg"
-            alt="Spiderman"
-            width={260}
-            height={70}
-            priority
-          />
+          <Link href="/">
+            <Image
+              src="/spider-logo.svg"
+              alt="Spiderman"
+              width={260}
+              height={70}
+              priority
+            />
+          </Link>
           <Image
             src="/icons/user.svg"
             alt="Login"

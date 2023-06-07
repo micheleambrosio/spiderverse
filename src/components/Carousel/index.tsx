@@ -41,11 +41,12 @@ export default function Carousel({ heroes }: IProps) {
     }
 
     const currentHeroId = visibleItems[1].id;
-    htmlEl.setAttribute("id", currentHeroId);
+    htmlEl.classList.add("hero-page");
     htmlEl.style.background = `url("/spiders/${currentHeroId}-background.png")`;
 
     return () => {
-      htmlEl.removeAttribute("id");
+      htmlEl.classList.remove("hero-page");
+      htmlEl.style.background = "var(--background)";
     };
   }, [visibleItems]);
 

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { spidermanFont } from "@/fonts";
 import styles from "./heroes.module.scss";
 import { IHeroData } from "@/interfaces/heroes";
+import Link from "next/link";
 
 interface IProps {
   heroes: IHeroData[];
@@ -35,7 +36,9 @@ export default function HeroesList({ heroes }: IProps) {
             whileTap={{ scale: 0.8 }}
             transition={{ duration: 0.8 }}
           >
-            <HeroPicture hero={hero} />
+            <Link href="/hero">
+              <HeroPicture hero={hero} />
+            </Link>
           </motion.div>
         ))}
       </motion.section>

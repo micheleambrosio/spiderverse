@@ -5,8 +5,14 @@
   display: flex;
   justify-content: space-between;
   position: absolute;
-  top: 300px;
+  top: 40%;
   width: 100%;
+  max-width: calc($max-width - 700px);
+
+  @media screen and (min-width: $max-width) {
+    max-width: calc($max-width - 400px);
+    top: 50%;
+  }
 }
 
 .imageContainer {
@@ -47,10 +53,10 @@
 }
 
 .title {
-  font-size: 20vw;
+  font-size: 26vw;
   margin: 0;
 
   @media screen and (min-width: $max-width) {
-    font-size: 28rem;
+    font-size: 30rem;
   }
 }

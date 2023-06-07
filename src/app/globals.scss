@@ -7,7 +7,7 @@
   height: 100vh;
   transition: background 1s ease-in-out;
 
-  &::before {
+  &:not(.hero-page)::before {
     background: url("/home-background.png");
     content: "";
     height: 100%;
@@ -15,10 +15,6 @@
     position: absolute;
     top: 0;
     width: 100%;
-  }
-
-  &[id]::before {
-    background-image: none;
   }
 }
 
@@ -34,7 +30,7 @@ header {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin: 3rem;
+  margin: 3rem 3rem 0;
   position: relative;
   z-index: 4;
 }
