@@ -23,7 +23,7 @@ interface IProps {
   hero: IHeroData;
 }
 
-export default function HeroImage({ hero }: IProps) {
+export default function HeroPicture({ hero }: IProps) {
   return (
     <Image
       src={heroesImage[hero.id] || ImageSpiderMan616}

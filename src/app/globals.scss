@@ -1,7 +1,7 @@
 @import "./variables.scss";
 
 :root::before {
-  background: url("/home-background.png");
+  // background: url("/home-background.png");
   content: "";
   height: 100%;
   opacity: 0.3;
@@ -11,10 +11,39 @@
 }
 
 :root {
-  --background-color: linear-gradient(#0069e3, #0056ba);
+  --background: linear-gradient(#0069e3, #0056ba);
 
-  background: var(--background-color);
+  background: var(--background);
   height: 100vh;
+  transition: background 1s ease-in-out;
+
+  &#spider-man-616 {
+    --background: #ff0000;
+  }
+
+  &#mulher-aranha-65 {
+    --background: #ff008f;
+  }
+
+  &#spider-man-1610 {
+    --background: #00002c;
+  }
+
+  &#sp-dr-14512 {
+    --background: #00b2ff;
+  }
+
+  &#porco-aranha-8311 {
+    --background: #ff8a00;
+  }
+
+  &#spider-man-90214 {
+    --background: #090304;
+  }
+
+  &#spider-man-928 {
+    --background: #3200c2;
+  }
 }
 
 body {

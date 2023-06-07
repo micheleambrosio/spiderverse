@@ -1,6 +1,6 @@
 "use client";
 
-import HeroImage from "../Hero";
+import HeroPicture from "../HeroPicture";
 import { motion } from "framer-motion";
 import { spidermanFont } from "@/fonts";
 import styles from "./heroes.module.scss";
@@ -10,7 +10,7 @@ interface IProps {
   heroes: IHeroData[];
 }
 
-export default function Heroes({ heroes }: IProps) {
+export default function HeroesList({ heroes }: IProps) {
   return (
     <>
       <motion.h1
@@ -35,7 +35,7 @@ export default function Heroes({ heroes }: IProps) {
             whileTap={{ scale: 0.8 }}
             transition={{ duration: 0.8 }}
           >
-            <HeroImage hero={hero} />
+            <HeroPicture hero={hero} />
           </motion.div>
         ))}
       </motion.section>

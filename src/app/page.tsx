@@ -1,4 +1,4 @@
-import Heroes from "@/components/Heroes";
+import HeroesList from "@/components/HeroesList";
 import { IHeroData } from "@/interfaces/heroes";
 import styles from "./page.module.scss";
 
@@ -17,7 +17,7 @@ export default async function Home() {
 
   return (
     <main className={styles.main}>
-      <Heroes heroes={res.data} />
+      <HeroesList heroes={res.data} />
     </main>
   );
 }
