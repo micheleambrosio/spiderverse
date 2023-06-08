@@ -3,7 +3,7 @@
 import HeroPicture from "@/components/HeroPicture";
 import { IHeroData } from "@/interfaces/heroes";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
 
@@ -18,7 +18,10 @@ interface IProps {
 }
 
 export default function Carousel({ heroes, activeId }: IProps) {
-  const [[activeIndex, direction], setActiveIndex] = useState([
+  const [startDragPosition, setStartDragPosition] = useState<number | null>(
+    null
+  );
+  const [[activeIndex, carouselDirection], setActiveIndex] = useState([
     heroes.findIndex((hero) => hero.id === activeId) - 1,
     0,
   ]);
@@ -74,6 +77,22 @@ export default function Carousel({ heroes, activeId }: IProps) {
     setActiveIndex((prevIndex) => [prevIndex[0] + newDirection, newDirection]);
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setStartDragPosition(e.clientX);
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!startDragPosition) {
+      return null;
+    }
+
+    const endDragPosition = e.clientX;
+    const diffPosition = endDragPosition - startDragPosition;
+
+    const newPosition = diffPosition > 0 ? -1 : 1;
+    handleClick(newPosition);
+  };
+
   useEffect(() => {
     transitionAudio.play();
     const audio = voicesAudio[visibleItems[1].id];
@@ -87,7 +106,12 @@ export default function Carousel({ heroes, activeId }: IProps) {
   return (
     <div className={styles.container}>
       <div className={styles.carousel}>
-        <div className={styles.wrapper} onClick={() => handleClick(1)}>
+        <div
+          className={styles.wrapper}
+          draggable
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
           <AnimatePresence mode="popLayout">
             {visibleItems.map((item) => (
               <motion.div
@@ -100,7 +124,7 @@ export default function Carousel({ heroes, activeId }: IProps) {
                 exit="exit"
                 transition={{ duration: 0.8 }}
                 custom={{
-                  direction,
+                  direction: carouselDirection,
                   position: () => {
                     if (item.id === visibleItems[0].id) {
                       return "left";

@@ -10,8 +10,13 @@
 }
 
 .wrapper {
+  cursor: grab;
   height: 130vh;
   position: relative;
+
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .hero {
