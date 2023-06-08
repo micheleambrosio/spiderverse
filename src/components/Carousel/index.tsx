@@ -3,7 +3,6 @@
 import HeroPicture from "@/components/HeroPicture";
 import { IHeroData } from "@/interfaces/heroes";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
