@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useState } from "react";
+
 import styles from "./page.module.scss";
 
 interface IVariantsProps {

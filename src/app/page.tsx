@@ -1,6 +1,7 @@
+import styles from "./page.module.scss";
+
 import HeroesList from "@/components/HeroesList";
 import { IHeroData } from "@/interfaces/heroes";
-import styles from "./page.module.scss";
 
 async function getData(): Promise<{ data: IHeroData[] }> {
   const res = await fetch("http://localhost:3000/api/heroes");
