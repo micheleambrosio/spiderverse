@@ -4,7 +4,7 @@ import HeroPicture from "@/components/HeroPicture";
 import { IHeroData } from "@/interfaces/heroes";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
 
@@ -24,7 +24,19 @@ export default function Carousel({ heroes, activeId }: IProps) {
     0,
   ]);
 
-  const router = useRouter();
+  const transitionAudio = useMemo(() => new Audio("/songs/transition.mp3"), []);
+  const voicesAudio: Record<string, HTMLAudioElement> = useMemo(
+    () => ({
+      "spider-man-616": new Audio("/songs/spider-man-616.mp3"),
+      "mulher-aranha-65": new Audio("/songs/mulher-aranha-65.mp3"),
+      "spider-man-1610": new Audio("/songs/spider-man-1610.mp3"),
+      "sp-dr-14512": new Audio("/songs/sp-dr-14512.mp3"),
+      "spider-ham-8311": new Audio("/songs/spider-ham-8311.mp3"),
+      "spider-man-90214": new Audio("/songs/spider-man-90214.mp3"),
+      "spider-man-928": new Audio("/songs/spider-man-928.mp3"),
+    }),
+    []
+  );
 
   // itens que serão mostrados ao longo do carrossel
   const items = [...heroes];
@@ -63,6 +75,16 @@ export default function Carousel({ heroes, activeId }: IProps) {
     setActiveIndex((prevIndex) => [prevIndex[0] + newDirection, newDirection]);
   };
 
+  useEffect(() => {
+    transitionAudio.play();
+    const audio = voicesAudio[visibleItems[1].id];
+
+    if (audio) {
+      audio.volume = 0.5;
+      audio?.play();
+    }
+  }, [visibleItems, transitionAudio, voicesAudio]);
+
   return (
     <div className={styles.container}>
       <div className={styles.carousel}>
@@ -77,7 +99,7 @@ export default function Carousel({ heroes, activeId }: IProps) {
                 initial="enter"
                 animate="visibleItems"
                 exit="exit"
-                transition={{ duration: 1 }}
+                transition={{ duration: 0.8 }}
                 custom={{
                   direction,
                   position: () => {
