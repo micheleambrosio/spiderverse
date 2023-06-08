@@ -1,7 +1,11 @@
 import Carousel from "@/components/Carousel";
-import HeroDetails from "@/components/HeroDetails";
 import { IHeroData } from "@/interfaces/heroes";
-import styles from "./page.module.scss";
+
+interface IProps {
+  params: {
+    slug: string;
+  };
+}
 
 async function getData(): Promise<{ data: IHeroData[] }> {
   const res = await fetch("http://localhost:3000/api/heroes");
@@ -13,13 +17,13 @@ async function getData(): Promise<{ data: IHeroData[] }> {
   return res.json();
 }
 
-export default async function Hero() {
+export default async function Hero({ params: { slug } }: IProps) {
   const res = await getData();
+  const activeHero = res.data.find((hero) => hero.id === slug);
 
-  return (
-    <div className={styles.container}>
-      <Carousel heroes={res.data} />
-      <HeroDetails />
-    </div>
-  );
+  if (!activeHero) {
+    return null;
+  }
+
+  return <Carousel heroes={res.data} activeId={activeHero.id} />;
 }

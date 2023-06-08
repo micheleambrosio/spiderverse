@@ -1,6 +1,5 @@
 import styles from "./heroDetails.module.scss";
 import { spidermanFont } from "@/fonts";
-import data from "@/app/api/heroes/heroes.json";
 import { IHeroData } from "@/interfaces/heroes";
 import Image from "next/image";
 import { Quicksand } from "next/font/google";
@@ -10,11 +9,15 @@ const quicksand = Quicksand({
   weight: ["400", "600", "700"],
 });
 
-export default function HeroDetails() {
-  const { id, name, universe, details }: IHeroData = data[0];
+interface IProps {
+  data: IHeroData;
+}
+
+export default function HeroDetails({ data }: IProps) {
+  const { id, name, universe, details } = data;
 
   return (
-    <div className={`${styles.container} ${quicksand.className}`}>
+    <div className={quicksand.className}>
       <h1 className={`${spidermanFont.className} ${styles.title}`}>
         {name} (Universo-{universe})
       </h1>

@@ -3,15 +3,13 @@
 :root {
   --background: linear-gradient(#0069e3, #0056ba);
 
-  background: var(--background);
   height: 100vh;
   transition: background 1s ease-in-out;
 
   &:not(.hero-page)::before {
-    background: url("/home-background.png");
     content: "";
+    background: var(--background);
     height: 100%;
-    opacity: 0.3;
     position: absolute;
     top: 0;
     width: 100%;

@@ -3,7 +3,9 @@
 import HeroPicture from "@/components/HeroPicture";
 import { IHeroData } from "@/interfaces/heroes";
 import { AnimatePresence, motion, Variants } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
 
 interface IVariantsProps {
@@ -13,10 +15,16 @@ interface IVariantsProps {
 
 interface IProps {
   heroes: IHeroData[];
+  activeId: string;
 }
 
-export default function Carousel({ heroes }: IProps) {
-  const [[activeIndex, direction], setActiveIndex] = useState([0, 0]);
+export default function Carousel({ heroes, activeId }: IProps) {
+  const [[activeIndex, direction], setActiveIndex] = useState([
+    heroes.findIndex((hero) => hero.id === activeId) - 1,
+    0,
+  ]);
+
+  const router = useRouter();
 
   // itens que serão mostrados ao longo do carrossel
   const items = [...heroes];
@@ -46,7 +54,6 @@ export default function Carousel({ heroes }: IProps) {
 
     return () => {
       htmlEl.classList.remove("hero-page");
-      htmlEl.style.background = "var(--background)";
     };
   }, [visibleItems]);
 
@@ -58,36 +65,47 @@ export default function Carousel({ heroes }: IProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.wrapper} onClick={() => handleClick(1)}>
-        <AnimatePresence mode="popLayout">
-          {visibleItems.map((item) => (
-            <motion.div
-              className={styles.hero}
-              key={item.id}
-              layout
-              variants={variants}
-              initial="enter"
-              animate="visibleItems"
-              exit="exit"
-              transition={{ duration: 1 }}
-              custom={{
-                direction,
-                position: () => {
-                  if (item.id === visibleItems[0].id) {
-                    return "left";
-                  } else if (item.id === visibleItems[1].id) {
-                    return "center";
-                  } else {
-                    return "right";
-                  }
-                },
-              }}
-            >
-              <HeroPicture hero={item} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
+      <div className={styles.carousel}>
+        <div className={styles.wrapper} onClick={() => handleClick(1)}>
+          <AnimatePresence mode="popLayout">
+            {visibleItems.map((item) => (
+              <motion.div
+                className={styles.hero}
+                key={item.id}
+                layout
+                variants={variants}
+                initial="enter"
+                animate="visibleItems"
+                exit="exit"
+                transition={{ duration: 1 }}
+                custom={{
+                  direction,
+                  position: () => {
+                    if (item.id === visibleItems[0].id) {
+                      return "left";
+                    } else if (item.id === visibleItems[1].id) {
+                      return "center";
+                    } else {
+                      return "right";
+                    }
+                  },
+                }}
+              >
+                <HeroPicture hero={item} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
       </div>
+
+      <motion.div
+        className={styles.details}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 2 }}
+      >
+        <HeroDetails data={visibleItems[1]} />
+      </motion.div>
     </div>
   );
 }

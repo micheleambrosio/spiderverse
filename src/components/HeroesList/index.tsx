@@ -36,7 +36,7 @@ export default function HeroesList({ heroes }: IProps) {
             whileTap={{ scale: 0.8 }}
             transition={{ duration: 0.8 }}
           >
-            <Link href="/hero">
+            <Link href={`/hero/${hero.id}`}>
               <HeroPicture hero={hero} />
             </Link>
           </motion.div>
