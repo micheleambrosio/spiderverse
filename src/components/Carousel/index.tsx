@@ -8,7 +8,6 @@ import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
 
 interface IVariantsProps {
-  direction: any;
   position: any;
 }
 
@@ -124,7 +123,6 @@ export default function Carousel({ heroes, activeId }: IProps) {
                 exit="exit"
                 transition={{ duration: 0.8 }}
                 custom={{
-                  direction: carouselDirection,
                   position: () => {
                     if (item.id === visibleItems[0].id) {
                       return "left";
@@ -156,7 +154,7 @@ export default function Carousel({ heroes, activeId }: IProps) {
 }
 
 const variants: Variants = {
-  enter: (params: IVariantsProps) => {
+  enter: () => {
     return {
       x: -1500,
       scale: 0.75,
@@ -168,7 +166,7 @@ const variants: Variants = {
       ...getItemStyles(params?.position()),
     };
   },
-  exit: (params: IVariantsProps) => {
+  exit: () => {
     return {
       x: 0,
       left: "-20%",
