@@ -7,8 +7,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import HeroDetails from "../HeroDetails";
 import styles from "./carousel.module.scss";
 
-interface IVariantsProps {
-  position: any;
+enum enPosition {
+  FRONT = "front",
+  MIDDLE = "middle",
+  BACK = "back",
 }
 
 interface IProps {
@@ -17,15 +19,10 @@ interface IProps {
 }
 
 export default function Carousel({ heroes, activeId }: IProps) {
-  const [startDragPosition, setStartDragPosition] = useState<number | null>(
-    null
-  );
-  const [[activeIndex, carouselDirection], setActiveIndex] = useState([
-    heroes.findIndex((hero) => hero.id === activeId) - 1,
-    0,
-  ]);
-
+  // som de transição
   const transitionAudio = useMemo(() => new Audio("/songs/transition.mp3"), []);
+
+  // voz de cada personagem
   const voicesAudio: Record<string, HTMLAudioElement> = useMemo(
     () => ({
       "spider-man-616": new Audio("/songs/spider-man-616.mp3"),
@@ -37,6 +34,16 @@ export default function Carousel({ heroes, activeId }: IProps) {
       "spider-man-928": new Audio("/songs/spider-man-928.mp3"),
     }),
     []
+  );
+
+  // state: item ativo do carrossel
+  const [activeIndex, setActiveIndex] = useState(
+    heroes.findIndex((hero) => hero.id === activeId) - 1
+  );
+
+  // state: posição inicial no evento onDragStart
+  const [startDragPosition, setStartDragPosition] = useState<number | null>(
+    null
   );
 
   // itens que serão mostrados ao longo do carrossel
@@ -54,6 +61,7 @@ export default function Carousel({ heroes, activeId }: IProps) {
     indexInArrayScope + 3
   );
 
+  // useEffect: alterar a imagem de fundo para cada herói
   useEffect(() => {
     const htmlEl = document.querySelector("html");
 
@@ -70,16 +78,34 @@ export default function Carousel({ heroes, activeId }: IProps) {
     };
   }, [visibleItems]);
 
-  // altera state de activeIndex (item à esquerda)
-  // altera state de direction (direção do carrossel, direita +1 e esquerda -1)
+  // useEffect: reproduzir voz do personagem do meio
+  useEffect(() => {
+    transitionAudio.play();
+    const audio = voicesAudio[visibleItems[1].id];
+
+    if (audio) {
+      audio.volume = 0.5;
+      audio?.play();
+    }
+  }, [visibleItems, transitionAudio, voicesAudio]);
+
+  // onClick: altera herói ativo no carrossel
   const handleClick = (newDirection: number) => {
-    setActiveIndex((prevIndex) => [prevIndex[0] + newDirection, newDirection]);
+    setActiveIndex((prevActiveIndex) => prevActiveIndex + newDirection);
   };
 
+  // onDragStart (mouse): armazena a posição inicial da interação
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     setStartDragPosition(e.clientX);
   };
 
+  // onTouchStart (touch): armazena a posição inicial da interação
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartDragPosition(e.touches[0].clientX);
+  };
+
+  // onDragEnd (mouse): armazena a posição final da interação
+  // mexe o carrossel na direção que o usuário fez o evento de interação
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
     if (!startDragPosition) {
       return null;
@@ -92,46 +118,62 @@ export default function Carousel({ heroes, activeId }: IProps) {
     handleClick(newPosition);
   };
 
-  useEffect(() => {
-    transitionAudio.play();
-    const audio = voicesAudio[visibleItems[1].id];
-
-    if (audio) {
-      audio.volume = 0.5;
-      audio?.play();
+  // onDragEnd (touch): armazena a posição final da interação
+  // mexe o carrossel na direção que o usuário fez o evento de interação
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!startDragPosition) {
+      return null;
     }
-  }, [visibleItems, transitionAudio, voicesAudio]);
+
+    const endDragPosition = e.changedTouches[0].clientX;
+    const diffPosition = endDragPosition - startDragPosition;
+
+    const newPosition = diffPosition > 0 ? -1 : 1;
+    handleClick(newPosition);
+  };
+
+  // mapeia a posição do item/herói no carrossel
+  const getPosition = (item: IHeroData) => {
+    if (item.id === visibleItems[0].id) {
+      return enPosition.FRONT;
+    }
+
+    if (item.id === visibleItems[1].id) {
+      return enPosition.MIDDLE;
+    }
+
+    return enPosition.BACK;
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.carousel}>
         <div
           className={styles.wrapper}
-          draggable
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           <AnimatePresence mode="popLayout">
             {visibleItems.map((item) => (
               <motion.div
                 className={styles.hero}
                 key={item.id}
-                layout
-                variants={variants}
-                initial="enter"
-                animate="visibleItems"
-                exit="exit"
                 transition={{ duration: 0.8 }}
-                custom={{
-                  position: () => {
-                    if (item.id === visibleItems[0].id) {
-                      return "left";
-                    } else if (item.id === visibleItems[1].id) {
-                      return "center";
-                    } else {
-                      return "right";
-                    }
-                  },
+                initial={{
+                  x: -1500,
+                  scale: 0.75,
+                }}
+                animate={{
+                  x: 0,
+                  ...getItemStyles(getPosition(item)),
+                }}
+                exit={{
+                  x: 0,
+                  left: "-20%",
+                  opacity: 0,
+                  scale: 1,
                 }}
               >
                 <HeroPicture hero={item} />
@@ -153,32 +195,10 @@ export default function Carousel({ heroes, activeId }: IProps) {
   );
 }
 
-const variants: Variants = {
-  enter: () => {
-    return {
-      x: -1500,
-      scale: 0.75,
-    };
-  },
-  visibleItems: (params: IVariantsProps) => {
-    return {
-      x: 0,
-      ...getItemStyles(params?.position()),
-    };
-  },
-  exit: () => {
-    return {
-      x: 0,
-      left: "-20%",
-      opacity: 0,
-      scale: 1,
-    };
-  },
-};
-
+// estilos para o item que está visível na animação
+// dependendo da posição do herói no carrossel
 const getItemStyles = (position: string) => {
-  // position === "left" (herói da frente)
-  if (position === "left") {
+  if (position === enPosition.FRONT) {
     return {
       filter: "blur(10px)",
       scale: 1.2,
@@ -186,8 +206,7 @@ const getItemStyles = (position: string) => {
     };
   }
 
-  // position === "center" (herói do meio)
-  if (position === "center") {
+  if (position === enPosition.MIDDLE) {
     return {
       left: 300,
       scale: 0.8,
@@ -196,7 +215,6 @@ const getItemStyles = (position: string) => {
     };
   }
 
-  // position === "right" (herói de trás)
   return {
     filter: "blur(10px)",
     left: 160,
