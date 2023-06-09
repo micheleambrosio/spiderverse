@@ -84,11 +84,11 @@ export default function Carousel({ heroes, activeId }: IProps) {
   // useEffect: reproduzir voz do personagem do meio
   useEffect(() => {
     transitionAudio.play();
-    const audio = voicesAudio[visibleItems[1].id];
+    const voiceAudio = voicesAudio[visibleItems[1].id];
 
-    if (audio) {
-      audio.volume = 0.5;
-      audio?.play();
+    if (voiceAudio) {
+      voiceAudio.volume = 0.5;
+      voiceAudio?.play();
     }
   }, [visibleItems, transitionAudio, voicesAudio]);
 
