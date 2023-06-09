@@ -5,11 +5,10 @@ import Link from "next/link";
 
 import HeroPicture from "../HeroPicture";
 
-import styles from "./heroes.module.scss";
+import styles from "./heroesList.module.scss";
 
 import { spidermanFont } from "@/fonts";
 import { IHeroData } from "@/interfaces/heroes";
-
 
 interface IProps {
   heroes: IHeroData[];
