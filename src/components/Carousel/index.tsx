@@ -44,31 +44,38 @@ export default function Carousel({ heroes, activeId }: IProps) {
     heroes.findIndex((hero) => hero.id === activeId) - 1
   );
 
+  const [visibleItems, setVisibleItems] = useState<IHeroData[] | null>(null);
+
   // state: posição inicial no evento onDragStart
   const [startDragPosition, setStartDragPosition] = useState<number | null>(
     null
   );
 
-  // itens que serão mostrados ao longo do carrossel
-  const items = [...heroes];
+  // useEffect: monta os heróis visíveis no carrossel
+  useEffect(() => {
+    // itens que serão mostrados ao longo do carrossel
+    const items = [...heroes];
 
-  // calcula o índice do array de acordo com o item ativo
-  // de forma que o número nunca saia do escopo do array
-  const indexInArrayScope =
-    ((activeIndex % items.length) + items.length) % items.length;
+    // calcula o índice do array de acordo com o item ativo
+    // de forma que o número nunca saia do escopo do array
+    const indexInArrayScope =
+      ((activeIndex % items.length) + items.length) % items.length;
 
-  // itens que estão visíveis neste momento para o usuário
-  // duplicamos o array para dar a impressão de um carrossel infinito (360deg)
-  const visibleItems = [...items, ...items].slice(
-    indexInArrayScope,
-    indexInArrayScope + 3
-  );
+    // itens que estão visíveis neste momento para o usuário
+    // duplicamos o array para dar a impressão de um carrossel infinito (360deg)
+    const visibleItems = [...items, ...items].slice(
+      indexInArrayScope,
+      indexInArrayScope + 3
+    );
+
+    setVisibleItems(visibleItems);
+  }, [heroes, activeIndex]);
 
   // useEffect: alterar a imagem de fundo para cada herói
   useEffect(() => {
     const htmlEl = document.querySelector("html");
 
-    if (!htmlEl) {
+    if (!htmlEl || !visibleItems) {
       return;
     }
 
@@ -83,6 +90,10 @@ export default function Carousel({ heroes, activeId }: IProps) {
 
   // useEffect: reproduzir voz do personagem do meio
   useEffect(() => {
+    if (!visibleItems) {
+      return;
+    }
+
     transitionAudio.play();
     const voiceAudio = voicesAudio[visibleItems[1].id];
 
@@ -137,6 +148,10 @@ export default function Carousel({ heroes, activeId }: IProps) {
 
   // mapeia a posição do item/herói no carrossel
   const getPosition = (item: IHeroData) => {
+    if (!visibleItems) {
+      return;
+    }
+
     if (item.id === visibleItems[0].id) {
       return enPosition.FRONT;
     }
@@ -147,6 +162,10 @@ export default function Carousel({ heroes, activeId }: IProps) {
 
     return enPosition.BACK;
   };
+
+  if (!visibleItems) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
